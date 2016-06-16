@@ -102,7 +102,7 @@ contract HashToken is TokenInterface {
         balances[msg.sender] += 10 ** 16;
         prev_hash = sha3(block.blockhash(block.number), prev_hash);
         // increase the difficulty
-        max_value *= 0.99;
+        max_value -=  max_value / 100;
     }
 
 }
