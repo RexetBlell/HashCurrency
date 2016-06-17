@@ -44,8 +44,8 @@ contract HashToken is TokenInterface {
     mapping (address => mapping (address => uint256)) allowed;
     uint256 public totalSupply;
 
-    bytes32 prev_hash;
-    uint max_value;
+    bytes32 public prev_hash;
+    uint public max_value;
 
     // Meta info
     string public name;
@@ -94,7 +94,8 @@ contract HashToken is TokenInterface {
       return allowed[_owner][_spender];
     }
 
-    // functions related to minting
+    event Mint(address indexed minter);
+
     function mint(bytes32 value) {
         if (uint(sha3(value, prev_hash)) > max_value) {
             throw;
@@ -103,6 +104,6 @@ contract HashToken is TokenInterface {
         prev_hash = sha3(block.blockhash(block.number), prev_hash);
         // increase the difficulty
         max_value -=  max_value / 100;
+        Mint(msg.sender);
     }
-
 }
